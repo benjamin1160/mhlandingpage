@@ -1,8 +1,14 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
 
-// 🏠 Mock data (replace with Supabase or CMS later)
-const mockHomes = {
+// Mock data for now - replace with Supabase or another CMS later
+interface Home {
+  name: string;
+  image: string;
+  description: string;
+}
+
+const mockHomes: Record<string, Home> = {
   "sunshine-320-xl": {
     name: "Sunshine 320 XL",
     image: "/homes/sunshine-320.png",
@@ -17,15 +23,20 @@ const mockHomes = {
   },
 };
 
-// ✅ Async page component — App Router compatible
+export async function generateStaticParams() {
+  return Object.keys(mockHomes).map((slug) => ({ slug }));
+}
+
 export default async function HomePage({
   params,
 }: {
   params: { slug: string };
 }) {
-  const home = mockHomes[params.slug as keyof typeof mockHomes];
+  const home = mockHomes[params.slug];
 
-  if (!home) return notFound();
+  if (!home) {
+    return notFound();
+  }
 
   return (
     <main className="min-h-screen bg-white text-slate-900 px-6 py-12">
@@ -44,9 +55,4 @@ export default async function HomePage({
       </div>
     </main>
   );
-}
-
-// ✅ Required for static site generation in app/ directory
-export async function generateStaticParams() {
-  return Object.keys(mockHomes).map((slug) => ({ slug }));
 }
