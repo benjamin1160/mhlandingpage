@@ -23,7 +23,7 @@ type Props = {
   };
 };
 
-export default function HomePage({ params }: Props) {
+export default async function HomePage({ params }: Props) {
   const home = mockHomes[params.slug];
 
   if (!home) return notFound();
@@ -48,5 +48,7 @@ export default function HomePage({ params }: Props) {
 }
 
 export async function generateStaticParams() {
-  return Object.keys(mockHomes).map((slug) => ({ slug }));
+  return Object.keys(mockHomes).map((slug) => ({ slug })) as {
+    slug: keyof typeof mockHomes;
+  }[];
 }
