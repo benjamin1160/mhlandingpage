@@ -1,45 +1,54 @@
-import Image from "next/image";
 import { notFound } from "next/navigation";
+import Image from "next/image";
 
 const mockHomes = {
   "sunshine-320-xl": {
     name: "Sunshine 320 XL",
+    image: "/homes/sunshine-320.png",
     description:
-      "Spacious design with modern amenities for comfortable living.",
-    image: "/sunshine-320.png",
+      "A spacious double-wide home with 3 bedrooms, 2 bathrooms, and modern finishes.",
   },
   "clayton-everest": {
     name: "Clayton Everest",
-    description: "Elegant style with plenty of room for the whole family.",
-    image: "/clayton-everest.png",
+    image: "/homes/clayton-everest.png",
+    description:
+      "A stylish 4-bedroom layout with an open concept kitchen and flex room.",
   },
-} as const;
-
-type Props = {
-  params: { slug: string };
 };
 
-export default function HomePage({ params }: Props) {
+// ✅ this is the CORRECT type structure
+type PageProps = {
+  params: {
+    slug: string;
+  };
+};
+
+export default function HomePage({ params }: PageProps) {
   const home = mockHomes[params.slug as keyof typeof mockHomes];
 
   if (!home) return notFound();
 
   return (
-    <main className="mx-auto max-w-3xl space-y-4 p-4 text-white">
-      <h1 className="text-3xl font-bold">{home.name}</h1>
-      <p>{home.description}</p>
-      <div className="relative h-64 w-full">
-        <Image
-          src={home.image}
-          alt={home.name}
-          fill
-          className="object-contain"
-        />
+    <main className="min-h-screen bg-white text-slate-900 px-6 py-12">
+      <div className="max-w-4xl mx-auto">
+        <h1 className="text-4xl font-extrabold">{home.name}</h1>
+        <p className="mt-4 text-lg text-slate-600">{home.description}</p>
+        <div className="mt-8 w-full h-[400px] relative">
+          <Image
+            src={home.image}
+            alt={home.name}
+            fill
+            className="object-contain rounded-xl shadow-xl"
+          />
+        </div>
       </div>
     </main>
   );
 }
 
-export function generateStaticParams() {
-  return Object.keys(mockHomes).map((slug) => ({ slug }));
+// ✅ Required for static generation in App Router
+export async function generateStaticParams() {
+  return Object.keys(mockHomes).map((slug) => ({
+    slug,
+  }));
 }
