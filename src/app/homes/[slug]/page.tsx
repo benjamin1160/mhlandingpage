@@ -1,5 +1,3 @@
-// src/app/homes/[slug]/page.tsx
-
 import { notFound } from "next/navigation";
 import Image from "next/image";
 
@@ -16,13 +14,9 @@ const mockHomes = {
   },
 };
 
+// Only one default export allowed 👇
 export default function HomePage({ params }: any) {
-  return Object.keys(mockHomes).map((slug) => ({ slug }));
-}
-
-export default function HomePage({ params }: { params: { slug: string } }) {
   const home = mockHomes[params.slug as keyof typeof mockHomes];
-
   if (!home) return notFound();
 
   return (
@@ -30,7 +24,6 @@ export default function HomePage({ params }: { params: { slug: string } }) {
       <div className="max-w-4xl mx-auto">
         <h1 className="text-4xl font-extrabold">{home.name}</h1>
         <p className="mt-4 text-lg text-slate-600">{home.description}</p>
-
         <div className="mt-8 w-full h-[400px] relative">
           <Image
             src={home.image}
@@ -42,4 +35,8 @@ export default function HomePage({ params }: { params: { slug: string } }) {
       </div>
     </main>
   );
+}
+
+export async function generateStaticParams() {
+  return Object.keys(mockHomes).map((slug) => ({ slug }));
 }
