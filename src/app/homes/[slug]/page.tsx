@@ -16,7 +16,7 @@ const mockHomes = {
   },
 };
 
-export async function generateStaticParams() {
+export default function HomePage({ params }: any) {
   return Object.keys(mockHomes).map((slug) => ({ slug }));
 }
 
