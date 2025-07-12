@@ -1,14 +1,18 @@
 import { create } from "zustand";
 
-export type HomeAnswers = Record<string, string | number>;
+export type HomeFields = {
+  bedrooms: number;
+  style: string;
+  budget: string;
+};
 
-interface HomeState {
-  answers: HomeAnswers;
-  setAnswer: (key: string, value: string | number) => void;
-}
+type HomeState = HomeFields & {
+  setAnswer: <K extends keyof HomeFields>(key: K, value: HomeFields[K]) => void;
+};
 
 export const useHomeStore = create<HomeState>((set) => ({
-  answers: {},
-  setAnswer: (key, value) =>
-    set((state) => ({ answers: { ...state.answers, [key]: value } })),
+  bedrooms: 0,
+  style: "",
+  budget: "",
+  setAnswer: (key, value) => set({ [key]: value }),
 }));

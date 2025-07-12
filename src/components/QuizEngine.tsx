@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { useHomeStore } from "@/state/homeStore";
+import { useHomeStore, type HomeFields } from "@/state/homeStore";
 
 const questions: {
-  key: string;
+  key: keyof HomeFields;
   label: string;
   options: Array<string | number>;
 }[] = [
