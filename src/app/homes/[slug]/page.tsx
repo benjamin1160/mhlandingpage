@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
 
+// 🏠 Mock home data
 const mockHomes = {
   "sunshine-320-xl": {
     name: "Sunshine 320 XL",
@@ -16,8 +17,14 @@ const mockHomes = {
   },
 } as const;
 
-export default function HomePage({ params }: { params: { slug: string } }) {
-  const home = mockHomes[params.slug as keyof typeof mockHomes];
+type Props = {
+  params: {
+    slug: keyof typeof mockHomes;
+  };
+};
+
+export default function HomePage({ params }: Props) {
+  const home = mockHomes[params.slug];
 
   if (!home) return notFound();
 
@@ -38,4 +45,8 @@ export default function HomePage({ params }: { params: { slug: string } }) {
       </div>
     </main>
   );
+}
+
+export async function generateStaticParams() {
+  return Object.keys(mockHomes).map((slug) => ({ slug }));
 }
