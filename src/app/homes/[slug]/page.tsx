@@ -1,14 +1,8 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
 
-// Mock data for now - replace with Supabase or another CMS later
-interface Home {
-  name: string;
-  image: string;
-  description: string;
-}
-
-const mockHomes: Record<string, Home> = {
+// 🏠 Mock data (replace with Supabase or CMS later)
+const mockHomes = {
   "sunshine-320-xl": {
     name: "Sunshine 320 XL",
     image: "/homes/sunshine-320.png",
@@ -21,7 +15,7 @@ const mockHomes: Record<string, Home> = {
     description:
       "A stylish 4-bedroom layout with an open concept kitchen and flex room.",
   },
-};
+} satisfies Record<string, { name: string; image: string; description: string }>;
 
 export async function generateStaticParams() {
   return Object.keys(mockHomes).map((slug) => ({ slug }));
@@ -32,7 +26,7 @@ export default async function HomePage({
 }: {
   params: { slug: string };
 }) {
-  const home = mockHomes[params.slug];
+  const home = mockHomes[params.slug as keyof typeof mockHomes];
 
   if (!home) {
     return notFound();
