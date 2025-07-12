@@ -17,14 +17,16 @@ const mockHomes = {
   },
 } as const;
 
-type Props = {
+// ✅ Required Next.js App Router typing
+export type PageProps = {
   params: {
-    slug: keyof typeof mockHomes;
+    slug: string;
   };
 };
 
-export default async function HomePage({ params }: Props) {
-  const home = mockHomes[params.slug];
+// ✅ Async component using correct App Router type
+export default async function HomePage({ params }: PageProps) {
+  const home = mockHomes[params.slug as keyof typeof mockHomes];
 
   if (!home) return notFound();
 
@@ -47,8 +49,7 @@ export default async function HomePage({ params }: Props) {
   );
 }
 
+// ✅ Required for static site generation in Next.js App Router
 export async function generateStaticParams() {
-  return Object.keys(mockHomes).map((slug) => ({ slug })) as {
-    slug: keyof typeof mockHomes;
-  }[];
+  return Object.keys(mockHomes).map((slug) => ({ slug }));
 }
