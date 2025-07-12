@@ -1,3 +1,5 @@
++ "use client";
+
 import { LiveHomePreview } from "@/components/LiveHomePreview";
 import { useHomeStore } from "@/state/homeStore";
 import { useEffect } from "react";
