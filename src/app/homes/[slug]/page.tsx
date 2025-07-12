@@ -1,3 +1,5 @@
+// src/app/homes/[slug]/page.tsx
+
 import { notFound } from "next/navigation";
 import Image from "next/image";
 
@@ -14,13 +16,11 @@ const mockHomes = {
   },
 };
 
-type Props = {
-  params: {
-    slug: string;
-  };
-};
+export async function generateStaticParams() {
+  return Object.keys(mockHomes).map((slug) => ({ slug }));
+}
 
-export default function Page({ params }: Props) {
+export default function HomePage({ params }: { params: { slug: string } }) {
   const home = mockHomes[params.slug as keyof typeof mockHomes];
 
   if (!home) return notFound();
@@ -42,8 +42,4 @@ export default function Page({ params }: Props) {
       </div>
     </main>
   );
-}
-
-export async function generateStaticParams() {
-  return Object.keys(mockHomes).map((slug) => ({ slug }));
 }
