@@ -1,10 +1,5 @@
-"use client";
-
-import { LiveHomePreview } from "@/components/LiveHomePreview";
-import { useHomeStore } from "@/state/homeStore";
-import { useEffect } from "react";
-// …rest of your code…
-
+// src/app/homes/[id]/page.tsx
+import ClientHomePage from "./ClientHomePage";
 
 // Pre-generate IDs 1–1000 for static pages
 export async function generateStaticParams() {
@@ -18,26 +13,7 @@ interface Props {
   params: { id: string };
 }
 
-function PreviewClient({ id }: { id: string }) {
-  "use client";
-
-  const setAnswer = useHomeStore((state) => state.setAnswer);
-
-  // Mock seeding for now
-  useEffect(() => {
-    setAnswer("bedrooms", 3);
-    setAnswer("style", "Modern");
-    setAnswer("budget", "$100k–$150k");
-  }, [id, setAnswer]);
-
-  return (
-    <main className="min-h-screen bg-white px-8 py-12">
-      <h1 className="mb-6 text-3xl font-bold">Home #{id} Preview</h1>
-      <LiveHomePreview />
-    </main>
-  );
-}
-
 export default function HomePage({ params }: Props) {
-  return <PreviewClient id={params.id} />;
+  // Server component: simply forwards to the client
+  return <ClientHomePage id={params.id} />;
 }
