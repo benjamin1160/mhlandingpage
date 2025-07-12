@@ -5,26 +5,29 @@ const mockHomes = {
   "sunshine-320-xl": {
     name: "Sunshine 320 XL",
     image: "/homes/sunshine-320.png",
-    description:
-      "A spacious double-wide home with 3 bedrooms, 2 bathrooms, and modern finishes.",
+    description: "A spacious double-wide home with 3 bedrooms, 2 bathrooms, and modern finishes.",
   },
   "clayton-everest": {
     name: "Clayton Everest",
     image: "/homes/clayton-everest.png",
-    description:
-      "A stylish 4-bedroom layout with an open concept kitchen and flex room.",
+    description: "A stylish 4-bedroom layout with an open-concept kitchen and flex room.",
   },
 };
 
-type HomePageProps = {
-  params: {
-    slug: keyof typeof mockHomes;
-  };
-};
+// Tell Next.js which slugs to pre-render
+export async function generateStaticParams() {
+  return Object.keys(mockHomes).map((slug) => ({ slug }));
+}
 
-export default function HomePage({ params }: HomePageProps) {
-  const home = mockHomes[params.slug];
-
+// Now match the full PageProps signature (params + searchParams)
+export default function HomePage({
+  params,
+  searchParams, // required by Next’s PageProps, even if unused
+}: {
+  params: { slug: string };
+  searchParams: Record<string, string | string[] | undefined>;
+}) {
+  const home = mockHomes[params.slug as keyof typeof mockHomes];
   if (!home) return notFound();
 
   return (
@@ -32,7 +35,6 @@ export default function HomePage({ params }: HomePageProps) {
       <div className="max-w-4xl mx-auto">
         <h1 className="text-4xl font-extrabold">{home.name}</h1>
         <p className="mt-4 text-lg text-slate-600">{home.description}</p>
-
         <div className="mt-8 w-full h-[400px] relative">
           <Image
             src={home.image}
@@ -44,10 +46,4 @@ export default function HomePage({ params }: HomePageProps) {
       </div>
     </main>
   );
-}
-
-export async function generateStaticParams() {
-  return Object.keys(mockHomes).map((slug) => ({
-    slug,
-  }));
 }
