@@ -1,8 +1,10 @@
-+ "use client";
+"use client";
 
 import { LiveHomePreview } from "@/components/LiveHomePreview";
 import { useHomeStore } from "@/state/homeStore";
 import { useEffect } from "react";
+// …rest of your code…
+
 
 // Pre-generate IDs 1–1000 for static pages
 export async function generateStaticParams() {
