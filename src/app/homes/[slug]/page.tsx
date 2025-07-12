@@ -14,9 +14,15 @@ const mockHomes = {
   },
 };
 
-// Only one default export allowed 👇
-export default function HomePage({ params }: any) {
-  const home = mockHomes[params.slug as keyof typeof mockHomes];
+type HomePageProps = {
+  params: {
+    slug: keyof typeof mockHomes;
+  };
+};
+
+export default function HomePage({ params }: HomePageProps) {
+  const home = mockHomes[params.slug];
+
   if (!home) return notFound();
 
   return (
