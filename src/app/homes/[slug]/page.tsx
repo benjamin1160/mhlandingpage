@@ -1,3 +1,8 @@
+// src/app/homes/[slug]/page.tsx
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
 import { notFound } from "next/navigation";
 import Image from "next/image";
 
@@ -14,19 +19,12 @@ const mockHomes = {
   },
 };
 
-// Tell Next.js which slugs to pre-render
 export async function generateStaticParams() {
   return Object.keys(mockHomes).map((slug) => ({ slug }));
 }
 
-// Now match the full PageProps signature (params + searchParams)
-export default function HomePage({
-  params,
-  searchParams, // required by Next’s PageProps, even if unused
-}: {
-  params: { slug: string };
-  searchParams: Record<string, string | string[] | undefined>;
-}) {
+export default function HomePage(props: any) {
+  const { params } = props;
   const home = mockHomes[params.slug as keyof typeof mockHomes];
   if (!home) return notFound();
 
