@@ -1,3 +1,4 @@
+// src/app/homes/[slug]/page.tsx
 import { notFound } from "next/navigation";
 import Image from "next/image";
 
@@ -16,14 +17,7 @@ const mockHomes = {
   },
 };
 
-// ✅ this is the CORRECT type structure
-type PageProps = {
-  params: {
-    slug: string;
-  };
-};
-
-export default function HomePage({ params }: PageProps) {
+export default function Page({ params }: { params: { slug: string } }) {
   const home = mockHomes[params.slug as keyof typeof mockHomes];
 
   if (!home) return notFound();
@@ -46,9 +40,6 @@ export default function HomePage({ params }: PageProps) {
   );
 }
 
-// ✅ Required for static generation in App Router
 export async function generateStaticParams() {
-  return Object.keys(mockHomes).map((slug) => ({
-    slug,
-  }));
+  return Object.keys(mockHomes).map((slug) => ({ slug }));
 }
