@@ -1,13 +1,10 @@
 import { create } from "zustand";
 
-export type HomeFields = {
+type HomeState = {
   bedrooms: number;
   style: string;
   budget: string;
-};
-
-type HomeState = HomeFields & {
-  setAnswer: <K extends keyof HomeFields>(key: K, value: HomeFields[K]) => void;
+  setAnswer: (key: keyof Omit<HomeState, "setAnswer">, value: number | string) => void;
 };
 
 export const useHomeStore = create<HomeState>((set) => ({
