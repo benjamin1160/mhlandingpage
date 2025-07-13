@@ -1,29 +1,26 @@
 "use client";
 
 import { useEffect } from "react";
-import Image from "next/image";
 import { LiveHomePreview } from "@/components/LiveHomePreview";
 import { useHomeStore } from "@/state/homeStore";
 
-export interface HomeData {
-  id: number;
-  bedrooms: number;
-  style: string;
-  budget: string;
-  image: string;
-  listings: { title: string; price: string }[];
-}
-
 interface Props {
   id: string;
-  homeData: HomeData;
+  homeData: {
+    id: number;
+    bedrooms: number;
+    style: string;
+    budget: string;
+    image: string;
+    listings: { title: string; price: string }[];
+  };
 }
 
 export default function ClientHomePage({ id, homeData }: Props) {
-  const setAnswer = useHomeStore((state) => state.setAnswer);
+  const setAnswer = useHomeStore((s) => s.setAnswer);
 
   useEffect(() => {
-    // Seed the global store with this home's actual data
+    // Seed global state with this home’s data
     setAnswer("bedrooms", homeData.bedrooms);
     setAnswer("style", homeData.style);
     setAnswer("budget", homeData.budget);
@@ -31,21 +28,19 @@ export default function ClientHomePage({ id, homeData }: Props) {
 
   return (
     <main className="min-h-screen bg-white px-8 py-12">
-      <h1 className="mb-6 text-3xl font-bold">Home #{id} Preview</h1>
+      <h1 className="mb-4 text-3xl font-bold">Home #{id} Preview</h1>
 
-      {/* Display the home image */}
-      <Image
+      {/* Display selected home image */}
+      <img
         src={homeData.image}
         alt={`Home ${id}`}
-        width={400}
-        height={300}
         className="mb-6 w-full max-w-md rounded"
       />
 
-      {/* The evolving preview based on quiz/store state */}
+      {/* Evolving preview based on quiz state */}
       <LiveHomePreview />
 
-      {/* Render listings */}
+      {/* Listings section */}
       <section className="mt-8">
         <h2 className="mb-4 text-2xl">Available Listings</h2>
         <ul className="list-inside list-disc">
