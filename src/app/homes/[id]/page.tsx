@@ -1,13 +1,11 @@
 // src/app/homes/[id]/page.tsx
 import ClientHomePage, { type HomeData } from "./ClientHomePage";
-import homesData from "@/data/homes.json";
 import { notFound } from "next/navigation";
 
-// Generate one static page per entry in homes.json
+// Pre-generate IDs 1–200 for static pages
 export async function generateStaticParams() {
-  return homesData.map((home) => ({
-    id: home.id.toString(),
-  }));
+  // you can still map from homes.json or fetch a list of IDs from your API
+  return Array.from({ length: 200 }, (_, i) => ({ id: String(i + 1) }));
 }
 
 export default async function HomePage({
@@ -16,19 +14,12 @@ export default async function HomePage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const base = homesData.find((h) => h.id.toString() === id);
-  if (!base) notFound();
-
-  const home: HomeData = {
-    id: base.id,
-    bedrooms: 3,
-    style: "Modern",
-    budget: "$100k–$150k",
-    image: "/home-placeholder.png",
-    listings: [
-      { title: "Example Listing", price: "$120,000" },
-    ],
-  };
-
-  return <ClientHomePage id={id} homeData={home} />;
+  // Fetch the real home data from your API
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/homes/${id}`,
+    { cache: "no-store" }
+  );
+  if (!res.ok) notFound();
+  const homeData = (await res.json()) as HomeData;
+  return <ClientHomePage id={id} homeData={homeData} />;
 }
