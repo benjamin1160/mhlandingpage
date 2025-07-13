@@ -1,0 +1,110 @@
+[
+  {
+    "key": "2-Modern-Under $100k",
+    "homeId": 1
+  },
+  {
+    "key": "2-Modern-$100k–$150k",
+    "homeId": 2
+  },
+  {
+    "key": "2-Modern-$150k+",
+    "homeId": 3
+  },
+  {
+    "key": "2-Farmhouse-Under $100k",
+    "homeId": 4
+  },
+  {
+    "key": "2-Farmhouse-$100k–$150k",
+    "homeId": 5
+  },
+  {
+    "key": "2-Farmhouse-$150k+",
+    "homeId": 6
+  },
+  {
+    "key": "2-Traditional-Under $100k",
+    "homeId": 7
+  },
+  {
+    "key": "2-Traditional-$100k–$150k",
+    "homeId": 8
+  },
+  {
+    "key": "2-Traditional-$150k+",
+    "homeId": 9
+  },
+  {
+    "key": "3-Modern-Under $100k",
+    "homeId": 10
+  },
+  {
+    "key": "3-Modern-$100k–$150k",
+    "homeId": 11
+  },
+  {
+    "key": "3-Modern-$150k+",
+    "homeId": 12
+  },
+  {
+    "key": "3-Farmhouse-Under $100k",
+    "homeId": 13
+  },
+  {
+    "key": "3-Farmhouse-$100k–$150k",
+    "homeId": 14
+  },
+  {
+    "key": "3-Farmhouse-$150k+",
+    "homeId": 15
+  },
+  {
+    "key": "3-Traditional-Under $100k",
+    "homeId": 16
+  },
+  {
+    "key": "3-Traditional-$100k–$150k",
+    "homeId": 17
+  },
+  {
+    "key": "3-Traditional-$150k+",
+    "homeId": 18
+  },
+  {
+    "key": "4-Modern-Under $100k",
+    "homeId": 19
+  },
+  {
+    "key": "4-Modern-$100k–$150k",
+    "homeId": 20
+  },
+  {
+    "key": "4-Modern-$150k+",
+    "homeId": 21
+  },
+  {
+    "key": "4-Farmhouse-Under $100k",
+    "homeId": 22
+  },
+  {
+    "key": "4-Farmhouse-$100k–$150k",
+    "homeId": 23
+  },
+  {
+    "key": "4-Farmhouse-$150k+",
+    "homeId": 24
+  },
+  {
+    "key": "4-Traditional-Under $100k",
+    "homeId": 25
+  },
+  {
+    "key": "4-Traditional-$100k–$150k",
+    "homeId": 26
+  },
+  {
+    "key": "4-Traditional-$150k+",
+    "homeId": 27
+  }
+]
