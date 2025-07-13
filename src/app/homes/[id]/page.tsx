@@ -1,5 +1,5 @@
 // src/app/homes/[id]/page.tsx
-import ClientHomePage from "./ClientHomePage";
+import ClientHomePage, { type HomeData } from "./ClientHomePage";
 import homesData from "@/data/homes.json";
 import { notFound } from "next/navigation";
 
@@ -16,7 +16,19 @@ export default async function HomePage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const home = homesData.find((h) => h.id.toString() === id);
-  if (!home) notFound();
+  const base = homesData.find((h) => h.id.toString() === id);
+  if (!base) notFound();
+
+  const home: HomeData = {
+    id: base.id,
+    bedrooms: 3,
+    style: "Modern",
+    budget: "$100k–$150k",
+    image: "/home-placeholder.png",
+    listings: [
+      { title: "Example Listing", price: "$120,000" },
+    ],
+  };
+
   return <ClientHomePage id={id} homeData={home} />;
 }
