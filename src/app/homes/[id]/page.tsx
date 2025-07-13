@@ -1,10 +1,12 @@
+// src/app/homes/[id]/page.tsx
 import ClientHomePage from "./ClientHomePage";
+import homesData from "@/data/homes.json";
+import { notFound } from "next/navigation";
 
-// Pre-generate IDs 1–1000 for static pages
+// Generate one static page per entry in homes.json
 export async function generateStaticParams() {
-  const total = 1000;
-  return Array.from({ length: total }, (_, i) => ({
-    id: String(i + 1),
+  return homesData.map((home) => ({
+    id: home.id.toString(),
   }));
 }
 
@@ -14,5 +16,7 @@ export default async function HomePage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  return <ClientHomePage id={id} />;
+  const home = homesData.find((h) => h.id.toString() === id);
+  if (!home) notFound();
+  return <ClientHomePage id={id} homeData={home} />;
 }

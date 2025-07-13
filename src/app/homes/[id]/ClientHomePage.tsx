@@ -6,9 +6,14 @@ import { useHomeStore } from "@/state/homeStore";
 
 interface Props {
   id: string;
+  homeData: {
+    id: number;
+    name: string;
+    [key: string]: unknown;
+  };
 }
 
-export default function ClientHomePage({ id }: Props) {
+export default function ClientHomePage({ id, homeData }: Props) {
   const setAnswer = useHomeStore((state) => state.setAnswer);
 
   useEffect(() => {
@@ -20,7 +25,7 @@ export default function ClientHomePage({ id }: Props) {
 
   return (
     <main className="min-h-screen bg-white px-8 py-12">
-      <h1 className="text-3xl font-bold mb-6">Home #{id} Preview</h1>
+      <h1 className="text-3xl font-bold mb-6">{homeData.name}</h1>
       <LiveHomePreview />
     </main>
   );
