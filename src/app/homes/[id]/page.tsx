@@ -1,10 +1,11 @@
 // src/app/homes/[id]/page.tsx
-import ClientHomePage, { type HomeData } from "./ClientHomePage";
+import ClientHomePage from "./ClientHomePage";
+import homesData from "@/data/homes.json";
 import { notFound } from "next/navigation";
 
-// Pre-generate IDs 1–200 for static pages
+// Build pages for IDs 1–5 from homes.json
 export async function generateStaticParams() {
-  return Array.from({ length: 200 }, (_, i) => ({ id: String(i + 1) }));
+  return homesData.map((h) => ({ id: h.id.toString() }));
 }
 
 export default async function HomePage({
@@ -13,14 +14,7 @@ export default async function HomePage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-
-  // Fetch the real home data from your API
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/homes/${id}`,
-    { cache: "no-store" },
-  );
-  if (!res.ok) notFound();
-  const homeData = (await res.json()) as HomeData;
-
-  return <ClientHomePage id={id} homeData={homeData} />;
+  const home = homesData.find((h) => h.id.toString() === id);
+  if (!home) notFound();
+  return <ClientHomePage id={id} homeData={home} />;
 }

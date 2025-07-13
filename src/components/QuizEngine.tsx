@@ -51,9 +51,23 @@ export function QuizEngine() {
           onChange={(key, value) =>
             setFormData((d) => ({ ...d, [key]: value }))
           }
-          onSubmit={() => {
-            // TODO: replace '1' with the correct home ID generated from answers
-            router.push(`/homes/1`);
+          onSubmit={async () => {
+            const { bedrooms, style, budget } = useHomeStore.getState();
+            try {
+              const res = await fetch("/api/map-home", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ bedrooms, style, budget }),
+              });
+              if (res.ok) {
+                const { homeId } = (await res.json()) as { homeId: number };
+                router.push(`/homes/${homeId}`);
+              } else {
+                console.error(await res.text());
+              }
+            } catch (err) {
+              console.error(err);
+            }
           }}
           onClose={() => setShowForm(false)}
         />
@@ -70,7 +84,7 @@ export function QuizEngine() {
             <button
               key={option}
               onClick={() => handleSelect(option)}
-              className="bg-white text-slate-900 rounded-lg px-6 py-3 text-lg hover:bg-emerald-100 transition-all"
+              className="rounded-lg bg-white px-6 py-3 text-lg text-slate-900 transition-all hover:bg-emerald-100"
             >
               {option}
             </button>
@@ -83,7 +97,24 @@ export function QuizEngine() {
           onChange={(key, value) =>
             setFormData((d) => ({ ...d, [key]: value }))
           }
-          onSubmit={() => router.push(`/homes/1`)}
+          onSubmit={async () => {
+            const { bedrooms, style, budget } = useHomeStore.getState();
+            try {
+              const res = await fetch("/api/map-home", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ bedrooms, style, budget }),
+              });
+              if (res.ok) {
+                const { homeId } = (await res.json()) as { homeId: number };
+                router.push(`/homes/${homeId}`);
+              } else {
+                console.error(await res.text());
+              }
+            } catch (err) {
+              console.error(err);
+            }
+          }}
           onClose={() => setShowForm(false)}
         />
       )}

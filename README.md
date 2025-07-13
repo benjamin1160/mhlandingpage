@@ -27,3 +27,14 @@ You can check out the [create-t3-app GitHub repository](https://github.com/t3-os
 ## How do I deploy this?
 
 Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+
+## Mapping quiz answers to home pages
+
+Quiz responses are mapped to specific home pages via
+`src/data/homeMapping.json`. Each entry links a combination of bedroom count,
+style and budget to a `homeId`. The `/api/map-home` endpoint reads this file and
+returns the matching `homeId`.
+
+To change which home page a set of answers should redirect to, edit
+`homeMapping.json` and redeploy. Alternatively you can update the endpoint to
+pull mappings from a database or CMS.
