@@ -64,7 +64,7 @@ export function QuizEngine() {
   return (
     <>
       <div className="space-y-6">
-        <h2 className="text-2xl font-bold">{current.label}</h2>
+        <h2 className="text-2xl font-bold text-slate-900">{current.label}</h2>
         <div className="flex flex-wrap gap-4">
           {current.options.map((option) => (
             <button
