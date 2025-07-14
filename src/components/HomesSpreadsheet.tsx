@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { DataGrid, type Column } from "react-data-grid";
+import "react-data-grid/lib/styles.css";
 
 interface Listing {
   title: string;
