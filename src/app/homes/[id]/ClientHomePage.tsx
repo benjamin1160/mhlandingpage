@@ -10,7 +10,9 @@ interface Listing {
 }
 interface HomeData {
   id: number;
+  name: string;
   bedrooms: number;
+  bathrooms: number;
   style: string;
   budget: string;
   image: string;
@@ -66,11 +68,29 @@ export default function ClientHomePage({ id, homeData }: Props) {
       {editMode ? (
         <div className="max-w-md space-y-4">
           <label className="block">
+            Name:
+            <input
+              type="text"
+              value={form.name}
+              onChange={(e) => onChange("name", e.target.value)}
+              className="mt-1 w-full rounded border p-2"
+            />
+          </label>
+          <label className="block">
             Bedrooms:
             <input
               type="number"
               value={form.bedrooms}
               onChange={(e) => onChange("bedrooms", +e.target.value)}
+              className="mt-1 w-full rounded border p-2"
+            />
+          </label>
+          <label className="block">
+            Bathrooms:
+            <input
+              type="number"
+              value={form.bathrooms}
+              onChange={(e) => onChange("bathrooms", +e.target.value)}
               className="mt-1 w-full rounded border p-2"
             />
           </label>
@@ -134,7 +154,13 @@ export default function ClientHomePage({ id, homeData }: Props) {
           <LiveHomePreview />
           <section className="mt-8 space-y-2">
             <p>
+              <strong>Name:</strong> {form.name}
+            </p>
+            <p>
               <strong>Bedrooms:</strong> {form.bedrooms}
+            </p>
+            <p>
+              <strong>Bathrooms:</strong> {form.bathrooms}
             </p>
             <p>
               <strong>Style:</strong> {form.style}

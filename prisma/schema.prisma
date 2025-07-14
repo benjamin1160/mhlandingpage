@@ -7,14 +7,16 @@
    url      = env("DATABASE_URL")
  }
 
- model Home {
-   id        Int       @id @default(autoincrement())
-   bedrooms  Int
-   style     String
-   budget    String
-   image     String
-   listings  Listing[]
- }
+model Home {
+  id        Int       @id @default(autoincrement())
+  name      String
+  bedrooms  Int
+  bathrooms Int
+  style     String
+  budget    String
+  image     String
+  listings  Listing[]
+}
 
  model Listing {
    id      Int    @id @default(autoincrement())

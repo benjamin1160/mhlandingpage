@@ -30,7 +30,9 @@ export async function PUT(
   const updated = await db.home.update({
     where: { id: Number(id) },
     data: {
+      name: data.name,
       bedrooms: data.bedrooms,
+      bathrooms: data.bathrooms,
       style: data.style,
       budget: data.budget,
       image: data.image,

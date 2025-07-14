@@ -9,7 +9,9 @@ interface Listing {
 }
 interface Home {
   id: number;
+  name: string;
   bedrooms: number;
+  bathrooms: number;
   style: string;
   budget: string;
   image: string;
@@ -23,9 +25,11 @@ export default function HomesSpreadsheet() {
   // Define columns for your grid
   const columns: Column<Home>[] = [
     { key: "id", name: "ID", width: 60 },
+    { key: "name", name: "Name", editable: true, width: 160 },
     { key: "bedrooms", name: "Bedrooms", editable: true },
+    { key: "bathrooms", name: "Bathrooms", editable: true },
     { key: "style", name: "Style", editable: true },
-    { key: "budget", name: "Budget", editable: true },
+    { key: "budget", name: "Price", editable: true },
     { key: "image", name: "Image URL", editable: true, width: 200 },
     {
       key: "listings",

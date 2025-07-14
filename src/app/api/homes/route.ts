@@ -23,7 +23,9 @@ export async function POST(req: NextRequest) {
   const updated = await db.home.update({
     where: { id: data.id },
     data: {
+      name: data.name,
       bedrooms: data.bedrooms,
+      bathrooms: data.bathrooms,
       style: data.style,
       budget: data.budget,
       image: data.image,
