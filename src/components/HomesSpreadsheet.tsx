@@ -21,7 +21,9 @@ interface Home {
 
 export default function HomesSpreadsheet() {
   const [rows, setRows] = useState<Home[]>([]);
+  const [originalRows, setOriginalRows] = useState<Home[]>([]);
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
 
   // Define columns for your grid
   const columns: Column<Home>[] = [
@@ -66,30 +68,52 @@ export default function HomesSpreadsheet() {
       .then((r) => r.json() as Promise<Home[]>)
       .then((data) => {
         setRows(data);
+        setOriginalRows(data);
         setLoading(false);
       });
   }, []);
 
-  const onRowsChange = async (newRows: Home[]) => {
+  const onRowsChange = (newRows: Home[]) => {
     setRows(newRows);
-    // Send updates for any edited row
-    for (const row of newRows) {
-      await fetch(`/api/homes/${row.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(row),
-      });
+  };
+
+  const onSave = async () => {
+    setSaving(true);
+    const updates: Promise<unknown>[] = [];
+    for (const row of rows) {
+      const orig = originalRows.find((r) => r.id === row.id);
+      if (orig && JSON.stringify(orig) !== JSON.stringify(row)) {
+        updates.push(
+          fetch(`/api/homes/${row.id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(row),
+          }),
+        );
+      }
     }
+    await Promise.all(updates);
+    setOriginalRows(rows);
+    setSaving(false);
   };
 
   if (loading) return <p>Loading spreadsheet…</p>;
 
   return (
-    <DataGrid
-      columns={columns}
-      rows={rows}
-      onRowsChange={onRowsChange}
-      className="h-[600px]"
-    />
+    <div className="space-y-4">
+      <DataGrid
+        columns={columns}
+        rows={rows}
+        onRowsChange={onRowsChange}
+        className="h-[600px]"
+      />
+      <button
+        onClick={onSave}
+        disabled={saving}
+        className="rounded bg-emerald-600 px-4 py-2 text-white hover:bg-emerald-700 disabled:opacity-50"
+      >
+        {saving ? "Saving…" : "Save Changes"}
+      </button>
+    </div>
   );
 }
