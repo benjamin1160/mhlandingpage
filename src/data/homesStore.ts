@@ -2,7 +2,9 @@
 
 export type Home = {
   id: number;
+  name: string;
   bedrooms: number;
+  bathrooms: number;
   style: string;
   budget: string;
   image: string;
@@ -13,7 +15,9 @@ export type Home = {
 let homes: Home[] = [
   {
     id: 1,
+    name: "Sunshine",
     bedrooms: 2,
+    bathrooms: 1,
     style: "Modern",
     budget: "Under $100k",
     image: "/sunshine-320.png",
@@ -24,7 +28,9 @@ let homes: Home[] = [
   },
   {
     id: 2,
+    name: "Everest",
     bedrooms: 3,
+    bathrooms: 2,
     style: "Farmhouse",
     budget: "$100k–$150k",
     image: "/clayton-everest.png",
@@ -32,7 +38,9 @@ let homes: Home[] = [
   },
   {
     id: 3,
+    name: "Heritage",
     bedrooms: 4,
+    bathrooms: 3,
     style: "Traditional",
     budget: "$150k+",
     image: "/home-placeholder.png",
@@ -43,7 +51,9 @@ let homes: Home[] = [
   },
   {
     id: 4,
+    name: "Modern Deluxe",
     bedrooms: 3,
+    bathrooms: 2,
     style: "Modern",
     budget: "$150k+",
     image: "/sunshine-320.png",
@@ -51,7 +61,9 @@ let homes: Home[] = [
   },
   {
     id: 5,
+    name: "Country Cottage",
     bedrooms: 2,
+    bathrooms: 1,
     style: "Farmhouse",
     budget: "Under $100k",
     image: "/clayton-everest.png",
