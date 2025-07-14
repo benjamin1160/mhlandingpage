@@ -19,17 +19,17 @@ export default function HomesIndex() {
   const handleChange = (
     id: number,
     field: keyof Home,
-    value: string | number
+    value: string | number,
   ) => {
     setHomes((hs) =>
       hs.map((h) =>
         h.id === id
-          ? {
+          ? ({
               ...h,
               [field]: value,
-            } as Home
-          : h
-      )
+            } as Home)
+          : h,
+      ),
     );
   };
 
@@ -48,13 +48,13 @@ export default function HomesIndex() {
 
   return (
     <main className="min-h-screen bg-white px-8 py-12">
-      <h1 className="text-4xl font-bold mb-8">Editable Homes Admin</h1>
+      <h1 className="mb-8 text-4xl font-bold">Editable Homes Admin</h1>
       <ul className="space-y-6">
         {homes.map((h) => (
-          <li key={h.id} className="border p-6 rounded-lg">
-            <h2 className="text-2xl font-semibold mb-4">Home #{h.id}</h2>
+          <li key={h.id} className="rounded-lg border p-6">
+            <h2 className="mb-4 text-2xl font-semibold">Home #{h.id}</h2>
 
-            <label className="block mb-2">
+            <label className="mb-2 block">
               Bedrooms:
               <input
                 type="number"
@@ -62,44 +62,40 @@ export default function HomesIndex() {
                 onChange={(e) =>
                   handleChange(h.id, "bedrooms", Number(e.target.value))
                 }
-                className="ml-2 p-1 border rounded w-20"
+                className="ml-2 w-20 rounded border p-1"
               />
             </label>
 
-            <label className="block mb-2">
+            <label className="mb-2 block">
               Style:
               <input
                 type="text"
                 value={h.style}
-                onChange={(e) =>
-                  handleChange(h.id, "style", e.target.value)
-                }
-                className="ml-2 p-1 border rounded"
+                onChange={(e) => handleChange(h.id, "style", e.target.value)}
+                className="ml-2 rounded border p-1"
               />
             </label>
 
-            <label className="block mb-2">
+            <label className="mb-2 block">
               Budget:
               <input
                 type="text"
                 value={h.budget}
-                onChange={(e) =>
-                  handleChange(h.id, "budget", e.target.value)
-                }
-                className="ml-2 p-1 border rounded"
+                onChange={(e) => handleChange(h.id, "budget", e.target.value)}
+                className="ml-2 rounded border p-1"
               />
             </label>
 
             <div className="mt-4 flex space-x-4">
               <button
                 onClick={() => save(h)}
-                className="px-4 py-2 bg-emerald-600 text-white rounded hover:bg-emerald-700"
+                className="rounded bg-emerald-600 px-4 py-2 text-white hover:bg-emerald-700"
               >
                 Save
               </button>
               <a
                 href={`/homes/${h.id}`}
-                className="px-4 py-2 border rounded hover:bg-gray-50"
+                className="rounded border px-4 py-2 hover:bg-gray-50"
               >
                 View
               </a>
