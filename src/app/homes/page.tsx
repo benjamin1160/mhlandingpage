@@ -1,112 +1,75 @@
+// src/app/homes/page.tsx
 "use client";
 
 import { useEffect, useState } from "react";
-import type { Home } from "@/data/homesStore";
+import Link from "next/link";
+
+interface Listing {
+  title: string;
+  price: string;
+}
+interface Home {
+  id: number;
+  bedrooms: number;
+  style: string;
+  budget: string;
+  image: string;
+  listings: Listing[];
+}
 
 export default function HomesIndex() {
   const [homes, setHomes] = useState<Home[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+
+  const perPage = 20;
 
   useEffect(() => {
-    void (async () => {
-      const res = await fetch("/api/homes");
-      const data = (await res.json()) as unknown as Home[];
-      setHomes(data);
-      setLoading(false);
-    })();
-  }, []);
-
-  const handleChange = (
-    id: number,
-    field: keyof Home,
-    value: string | number
-  ) => {
-    setHomes((hs) =>
-      hs.map((h) =>
-        h.id === id
-          ? {
-              ...h,
-              [field]: value,
-            } as Home
-          : h
-      )
-    );
-  };
-
-  const save = async (home: Home) => {
-    const res = await fetch(`/api/homes/${home.id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(home),
-    });
-    const updated = (await res.json()) as Home;
-    // Update local state so the UI reflects the change immediately
-    setHomes((hs) => hs.map((h) => (h.id === updated.id ? updated : h)));
-  };
-
-  if (loading) return <p className="p-8">Loading homes…</p>;
+    setLoading(true);
+    void fetch(`/api/homes?page=${page}&perPage=${perPage}`)
+      .then((r) => r.json() as Promise<Home[]>)
+      .then((data) => {
+        setHomes(data);
+        setLoading(false);
+      });
+  }, [page]);
 
   return (
     <main className="min-h-screen bg-white px-8 py-12">
-      <h1 className="text-4xl font-bold mb-8">Editable Homes Admin</h1>
-      <ul className="space-y-6">
-        {homes.map((h) => (
-          <li key={h.id} className="border p-6 rounded-lg">
-            <h2 className="text-2xl font-semibold mb-4">Home #{h.id}</h2>
+      <h1 className="mb-6 text-4xl font-bold">Homes (Page {page})</h1>
 
-            <label className="block mb-2">
-              Bedrooms:
-              <input
-                type="number"
-                value={h.bedrooms}
-                onChange={(e) =>
-                  handleChange(h.id, "bedrooms", Number(e.target.value))
-                }
-                className="ml-2 p-1 border rounded w-20"
-              />
-            </label>
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {homes.map((home) => (
+            <li key={home.id} className="rounded-lg border p-4 hover:shadow-lg">
+              <Link href={`/homes/${home.id}`}>
+                <h2 className="mb-2 text-2xl font-semibold">Home #{home.id}</h2>
+                <p>
+                  {home.bedrooms} bed • {home.style} • {home.budget}
+                </p>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
 
-            <label className="block mb-2">
-              Style:
-              <input
-                type="text"
-                value={h.style}
-                onChange={(e) =>
-                  handleChange(h.id, "style", e.target.value)
-                }
-                className="ml-2 p-1 border rounded"
-              />
-            </label>
-
-            <label className="block mb-2">
-              Budget:
-              <input
-                type="text"
-                value={h.budget}
-                onChange={(e) =>
-                  handleChange(h.id, "budget", e.target.value)
-                }
-                className="ml-2 p-1 border rounded"
-              />
-            </label>
-
-            <div className="mt-4 flex space-x-4">
-              <button
-                onClick={() => save(h)}
-                className="px-4 py-2 bg-emerald-600 text-white rounded hover:bg-emerald-700"
-              >
-                Save
-              </button>
-              <a
-                href={`/homes/${h.id}`}
-                className="px-4 py-2 border rounded hover:bg-gray-50"
-              >
-                View
-              </a>
-            </div>
-          </li>
-        ))}
-      </ul>
+      <div className="mt-8 flex justify-between">
+        <button
+          onClick={() => setPage((p) => Math.max(1, p - 1))}
+          disabled={page === 1}
+          className="rounded bg-slate-200 px-4 py-2 disabled:opacity-50"
+        >
+          Previous
+        </button>
+        <button
+          onClick={() => setPage((p) => p + 1)}
+          className="rounded bg-slate-200 px-4 py-2"
+        >
+          Next
+        </button>
+      </div>
     </main>
   );
 }
