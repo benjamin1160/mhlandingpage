@@ -10,7 +10,7 @@ export function LiveHomePreview() {
   const visibility = totalAnswered / 3; // 0 → 1
 
   return (
-    <div className="w-full h-[300px] md:h-[400px] relative rounded-xl overflow-hidden bg-slate-800">
+    <div className="relative h-[300px] w-full overflow-hidden rounded-xl bg-slate-800 md:h-[400px]">
       <Image
         src="/home-placeholder.png"
         alt="Your dream home"
