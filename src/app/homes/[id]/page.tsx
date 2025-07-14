@@ -1,12 +1,10 @@
 // src/app/homes/[id]/page.tsx
 import ClientHomePage from "./ClientHomePage";
-import homesData from "@/data/homes.json";
+import { getHome } from "@/data/homesStore";
 import { notFound } from "next/navigation";
 
-// Build pages for IDs 1–5 from homes.json
-export async function generateStaticParams() {
-  return homesData.map((h) => ({ id: h.id.toString() }));
-}
+// Force Next.js to skip cache and re-run this on every request
+export const dynamic = "force-dynamic";
 
 export default async function HomePage({
   params,
@@ -14,7 +12,7 @@ export default async function HomePage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const home = homesData.find((h) => h.id.toString() === id);
-  if (!home) notFound();
+  const home = getHome(Number(id));
+  if (!home) return notFound();
   return <ClientHomePage id={id} homeData={home} />;
 }
