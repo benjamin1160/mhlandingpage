@@ -181,6 +181,14 @@ export default function HomesSpreadsheet() {
   };
 
   const onSave = async () => {
+    // blur the active element so react-data-grid commits any edits
+    if (
+      typeof document !== "undefined" &&
+      document.activeElement instanceof HTMLElement
+    ) {
+      document.activeElement.blur();
+    }
+
     setSaving(true);
     const updates: Promise<unknown>[] = [];
     for (const row of rows) {
