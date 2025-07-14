@@ -28,24 +28,92 @@ export default function HomesSpreadsheet() {
   // Define columns for your grid
   const columns: Column<Home>[] = [
     { key: "id", name: "ID", width: 60 },
-    { key: "name", name: "Name", editable: true, width: 160 },
-    { key: "bedrooms", name: "Bedrooms", editable: true },
-    { key: "bathrooms", name: "Bathrooms", editable: true },
-    { key: "style", name: "Style", editable: true },
-    { key: "budget", name: "Price", editable: true },
-    { key: "image", name: "Image URL", editable: true, width: 200 },
+    {
+      key: "name",
+      name: "Name",
+      width: 160,
+      editable: true,
+      renderEditCell: ({ row, onRowChange }) => (
+        <input
+          className="h-full w-full p-1"
+          value={row.name}
+          onChange={(e) => onRowChange({ ...row, name: e.target.value })}
+        />
+      ),
+    },
+    {
+      key: "bedrooms",
+      name: "Bedrooms",
+      editable: true,
+      renderEditCell: ({ row, onRowChange }) => (
+        <input
+          type="number"
+          className="h-full w-full p-1"
+          value={row.bedrooms}
+          onChange={(e) =>
+            onRowChange({ ...row, bedrooms: Number(e.target.value) })
+          }
+        />
+      ),
+    },
+    {
+      key: "bathrooms",
+      name: "Bathrooms",
+      editable: true,
+      renderEditCell: ({ row, onRowChange }) => (
+        <input
+          type="number"
+          className="h-full w-full p-1"
+          value={row.bathrooms}
+          onChange={(e) =>
+            onRowChange({ ...row, bathrooms: Number(e.target.value) })
+          }
+        />
+      ),
+    },
+    {
+      key: "style",
+      name: "Style",
+      editable: true,
+      renderEditCell: ({ row, onRowChange }) => (
+        <input
+          className="h-full w-full p-1"
+          value={row.style}
+          onChange={(e) => onRowChange({ ...row, style: e.target.value })}
+        />
+      ),
+    },
+    {
+      key: "budget",
+      name: "Price",
+      editable: true,
+      renderEditCell: ({ row, onRowChange }) => (
+        <input
+          className="h-full w-full p-1"
+          value={row.budget}
+          onChange={(e) => onRowChange({ ...row, budget: e.target.value })}
+        />
+      ),
+    },
+    {
+      key: "image",
+      name: "Image URL",
+      width: 200,
+      editable: true,
+      renderEditCell: ({ row, onRowChange }) => (
+        <input
+          className="h-full w-full p-1"
+          value={row.image}
+          onChange={(e) => onRowChange({ ...row, image: e.target.value })}
+        />
+      ),
+    },
     {
       key: "listings",
       name: "Listings (JSON)",
       editable: true,
       renderCell: ({ row }: { row: Home }) => JSON.stringify(row.listings),
-      renderEditCell: ({
-        row,
-        onRowChange,
-      }: {
-        row: Home;
-        onRowChange: (row: Home) => void;
-      }) => (
+      renderEditCell: ({ row, onRowChange }) => (
         <textarea
           rows={2}
           value={JSON.stringify(row.listings)}
@@ -105,6 +173,7 @@ export default function HomesSpreadsheet() {
         columns={columns}
         rows={rows}
         onRowsChange={onRowsChange}
+        rowKeyGetter={(row) => row.id}
         className="h-[600px]"
       />
       <button
