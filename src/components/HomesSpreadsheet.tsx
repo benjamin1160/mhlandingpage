@@ -129,6 +129,16 @@ export default function HomesSpreadsheet() {
         />
       ),
     },
+    {
+      key: "delete",
+      name: "",
+      width: 80,
+      renderCell: ({ row }) => (
+        <button className="text-red-600" onClick={() => handleDelete(row.id)}>
+          Delete
+        </button>
+      ),
+    },
   ];
 
   useEffect(() => {
@@ -143,6 +153,31 @@ export default function HomesSpreadsheet() {
 
   const onRowsChange = (newRows: Home[]) => {
     setRows(newRows);
+  };
+
+  const handleDelete = async (id: number) => {
+    await fetch(`/api/homes/${id}`, { method: "DELETE" });
+    setRows((r) => r.filter((h) => h.id !== id));
+    setOriginalRows((r) => r.filter((h) => h.id !== id));
+  };
+
+  const addHomeRow = async () => {
+    const res = await fetch("/api/homes", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: "",
+        bedrooms: 0,
+        bathrooms: 0,
+        style: "",
+        budget: "",
+        image: "",
+        listings: [],
+      }),
+    });
+    const newHome = (await res.json()) as Home;
+    setRows((r) => [...r, newHome]);
+    setOriginalRows((r) => [...r, newHome]);
   };
 
   const onSave = async () => {
@@ -176,13 +211,21 @@ export default function HomesSpreadsheet() {
         rowKeyGetter={(row) => row.id}
         className="h-[600px]"
       />
-      <button
-        onClick={onSave}
-        disabled={saving}
-        className="rounded bg-emerald-600 px-4 py-2 text-white hover:bg-emerald-700 disabled:opacity-50"
-      >
-        {saving ? "Saving…" : "Save Changes"}
-      </button>
+      <div className="flex gap-4">
+        <button
+          onClick={addHomeRow}
+          className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+        >
+          Add Home
+        </button>
+        <button
+          onClick={onSave}
+          disabled={saving}
+          className="rounded bg-emerald-600 px-4 py-2 text-white hover:bg-emerald-700 disabled:opacity-50"
+        >
+          {saving ? "Saving…" : "Save Changes"}
+        </button>
+      </div>
     </div>
   );
 }

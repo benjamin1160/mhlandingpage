@@ -45,3 +45,15 @@ export async function PUT(
   });
   return NextResponse.json(updated);
 }
+
+export async function DELETE(
+  _req: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  const { id } = await params;
+  const deleted = await db.home.delete({
+    where: { id: Number(id) },
+    include: { listings: true },
+  });
+  return NextResponse.json(deleted);
+}

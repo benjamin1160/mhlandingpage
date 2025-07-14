@@ -20,8 +20,7 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   const data = await req.json();
-  const updated = await db.home.update({
-    where: { id: data.id },
+  const created = await db.home.create({
     data: {
       name: data.name,
       bedrooms: data.bedrooms,
@@ -29,12 +28,9 @@ export async function POST(req: NextRequest) {
       style: data.style,
       budget: data.budget,
       image: data.image,
-      listings: {
-        deleteMany: { homeId: data.id },
-        createMany: { data: data.listings },
-      },
+      listings: { createMany: { data: data.listings } },
     },
     include: { listings: true },
   });
-  return NextResponse.json(updated);
+  return NextResponse.json(created);
 }

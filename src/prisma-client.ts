@@ -7,9 +7,14 @@ minimal type checking, so we disable a few eslint rules.
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-import { getAllHomes, getHome, updateHome, type Home } from "@/data/homesStore";
-
-let nextId = Math.max(...getAllHomes().map((h) => h.id)) + 1;
+import {
+  getAllHomes,
+  getHome,
+  updateHome,
+  addHome,
+  deleteHome,
+  type Home,
+} from "@/data/homesStore";
 
 class HomeDelegate {
   async findMany({ skip = 0, take = 10 } = {}): Promise<Home[]> {
@@ -62,9 +67,15 @@ class HomeDelegate {
   }
 
   async create({ data }: { data: Omit<Home, "id"> }): Promise<Home> {
-    const home: Home = { id: nextId++, ...data };
-    // use updateHome to add new home
-    updateHome(home);
+    return addHome(data);
+  }
+
+  async delete({ where: { id } }: { where: { id: number } }): Promise<Home> {
+    const home = getHome(id);
+    if (!home) {
+      throw new Error(`Home ${id} not found`);
+    }
+    deleteHome(id);
     return home;
   }
 }

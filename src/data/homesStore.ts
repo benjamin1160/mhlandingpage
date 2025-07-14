@@ -84,3 +84,19 @@ export function updateHome(updated: Home) {
   homes = homes.map((h) => (h.id === updated.id ? updated : h));
   return updated;
 }
+
+export function addHome(data: Omit<Home, "id">) {
+  const nextId = homes.length ? Math.max(...homes.map((h) => h.id)) + 1 : 1;
+  const home: Home = { id: nextId, ...data };
+  homes.push(home);
+  return home;
+}
+
+export function deleteHome(id: number) {
+  const idx = homes.findIndex((h) => h.id === id);
+  if (idx !== -1) {
+    homes.splice(idx, 1);
+    return true;
+  }
+  return false;
+}
