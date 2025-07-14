@@ -56,25 +56,25 @@ export default function ClientHomePage({ id, homeData }: Props) {
 
   return (
     <main className="min-h-screen bg-white px-8 py-12">
-      <div className="flex justify-between items-center mb-6">
+      <div className="mb-6 flex items-center justify-between">
         <h1 className="text-3xl font-bold">Home #{id} Preview</h1>
         <button
           onClick={() => setEditMode((m) => !m)}
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
         >
           {editMode ? "Cancel" : "Edit"}
         </button>
       </div>
 
       {editMode ? (
-        <div className="space-y-4 max-w-md">
+        <div className="max-w-md space-y-4">
           <label className="block">
             Bedrooms:
             <input
               type="number"
               value={form.bedrooms}
               onChange={(e) => onChange("bedrooms", +e.target.value)}
-              className="mt-1 w-full p-2 border rounded"
+              className="mt-1 w-full rounded border p-2"
             />
           </label>
           <label className="block">
@@ -83,7 +83,7 @@ export default function ClientHomePage({ id, homeData }: Props) {
               type="text"
               value={form.style}
               onChange={(e) => onChange("style", e.target.value)}
-              className="mt-1 w-full p-2 border rounded"
+              className="mt-1 w-full rounded border p-2"
             />
           </label>
           <label className="block">
@@ -92,7 +92,7 @@ export default function ClientHomePage({ id, homeData }: Props) {
               type="text"
               value={form.budget}
               onChange={(e) => onChange("budget", e.target.value)}
-              className="mt-1 w-full p-2 border rounded"
+              className="mt-1 w-full rounded border p-2"
             />
           </label>
           <label className="block">
@@ -101,7 +101,7 @@ export default function ClientHomePage({ id, homeData }: Props) {
               type="text"
               value={form.image}
               onChange={(e) => onChange("image", e.target.value)}
-              className="mt-1 w-full p-2 border rounded"
+              className="mt-1 w-full rounded border p-2"
             />
           </label>
           {/* For simplicity, edit listings as JSON */}
@@ -114,19 +114,22 @@ export default function ClientHomePage({ id, homeData }: Props) {
                 try {
                   onChange(
                     "listings",
-                    JSON.parse(e.target.value) as { title: string; price: string }[]
+                    JSON.parse(e.target.value) as {
+                      title: string;
+                      price: string;
+                    }[],
                   );
                 } catch {
                   // ignore parse errors
                 }
               }}
-              className="mt-1 w-full p-2 border rounded font-mono text-sm"
+              className="mt-1 w-full rounded border p-2 font-mono text-sm"
             />
           </label>
           <button
             onClick={onSave}
             disabled={saving}
-            className="px-4 py-2 bg-emerald-600 text-white rounded hover:bg-emerald-700"
+            className="rounded bg-emerald-600 px-4 py-2 text-white hover:bg-emerald-700"
           >
             {saving ? "Saving…" : "Save Changes"}
           </button>
@@ -151,7 +154,7 @@ export default function ClientHomePage({ id, homeData }: Props) {
             </p>
             <div>
               <strong>Listings:</strong>
-              <ul className="list-disc list-inside ml-4">
+              <ul className="ml-4 list-inside list-disc">
                 {form.listings.map((l, i) => (
                   <li key={i}>
                     {l.title}: {l.price}
