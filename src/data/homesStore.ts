@@ -12,64 +12,29 @@ export type Home = {
 };
 
 // Initial demo data (modify this array at any time to add/remove homes)
-let homes: Home[] = [
-  {
-    id: 1,
-    name: "Sunshine",
-    bedrooms: 2,
-    bathrooms: 1,
-    style: "Modern",
-    budget: "Under $100k",
-    image: "/sunshine-320.png",
-    listings: [
-      { title: "Cozy Corner", price: "$90k" },
-      { title: "Riverside View", price: "$95k" },
-    ],
-  },
-  {
-    id: 2,
-    name: "Everest",
-    bedrooms: 3,
-    bathrooms: 2,
-    style: "Farmhouse",
-    budget: "$100k–$150k",
-    image: "/clayton-everest.png",
-    listings: [{ title: "Country Charm", price: "$120k" }],
-  },
-  {
-    id: 3,
-    name: "Heritage",
-    bedrooms: 4,
-    bathrooms: 3,
-    style: "Traditional",
-    budget: "$150k+",
-    image: "/home-placeholder.png",
-    listings: [
-      { title: "Grand Retreat", price: "$160k" },
-      { title: "Lake House", price: "$175k" },
-    ],
-  },
-  {
-    id: 4,
-    name: "Modern Deluxe",
-    bedrooms: 3,
-    bathrooms: 2,
-    style: "Modern",
-    budget: "$150k+",
-    image: "/sunshine-320.png",
-    listings: [{ title: "Urban Oasis", price: "$155k" }],
-  },
-  {
-    id: 5,
-    name: "Country Cottage",
-    bedrooms: 2,
-    bathrooms: 1,
-    style: "Farmhouse",
-    budget: "Under $100k",
-    image: "/clayton-everest.png",
-    listings: [{ title: "Cozy Cottage", price: "$85k" }],
-  },
-];
+import { readFileSync, writeFileSync } from "fs";
+import path from "path";
+
+const DATA_FILE = path.join(process.cwd(), "src/data/homesData.json");
+
+function loadHomes(): Home[] {
+  try {
+    const raw = readFileSync(DATA_FILE, "utf8");
+    return JSON.parse(raw) as Home[];
+  } catch {
+    return [];
+  }
+}
+
+let homes: Home[] = loadHomes();
+
+function saveHomes() {
+  try {
+    writeFileSync(DATA_FILE, JSON.stringify(homes, null, 2));
+  } catch {
+    // ignore write errors in read-only environments
+  }
+}
 
 // CRUD helpers
 export function getAllHomes() {
@@ -82,6 +47,7 @@ export function getHome(id: number) {
 
 export function updateHome(updated: Home) {
   homes = homes.map((h) => (h.id === updated.id ? updated : h));
+  saveHomes();
   return updated;
 }
 
@@ -89,6 +55,7 @@ export function addHome(data: Omit<Home, "id">) {
   const nextId = homes.length ? Math.max(...homes.map((h) => h.id)) + 1 : 1;
   const home: Home = { id: nextId, ...data };
   homes.push(home);
+  saveHomes();
   return home;
 }
 
@@ -96,6 +63,7 @@ export function deleteHome(id: number) {
   const idx = homes.findIndex((h) => h.id === id);
   if (idx !== -1) {
     homes.splice(idx, 1);
+    saveHomes();
     return true;
   }
   return false;
