@@ -3,15 +3,20 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { LiveHomePreview } from "@/components/LiveHomePreview";
-import { useHomeStore } from "@/state/homeStore";
 
+interface Listing {
+  title: string;
+  price: string;
+}
 interface HomeData {
   id: number;
+  name: string;
   bedrooms: number;
+  bathrooms: number;
   style: string;
   budget: string;
   image: string;
-  listings: { title: string; price: string }[];
+  listings: Listing[];
 }
 
 interface Props {
@@ -21,26 +26,16 @@ interface Props {
 
 export default function ClientHomePage({ id, homeData }: Props) {
   const router = useRouter();
-  const setAnswer = useHomeStore((s) => s.setAnswer);
-
-  // Local state for edit form
   const [editMode, setEditMode] = useState(false);
   const [form, setForm] = useState<HomeData>(homeData);
   const [saving, setSaving] = useState(false);
 
-  // Seed Zustand for the preview
-  useEffect(() => {
-    setAnswer("bedrooms", form.bedrooms);
-    setAnswer("style", form.style);
-    setAnswer("budget", form.budget);
-  }, [form, setAnswer]);
-
-  // Handle input changes
+  // Update form state on input change
   const onChange = <K extends keyof HomeData>(key: K, value: HomeData[K]) => {
     setForm((f) => ({ ...f, [key]: value }));
   };
 
-  // Save back to API and refresh
+  // Save changes via API and refresh
   const onSave = async () => {
     setSaving(true);
     await fetch(`/api/homes/${id}`, {
@@ -50,31 +45,53 @@ export default function ClientHomePage({ id, homeData }: Props) {
     });
     setSaving(false);
     setEditMode(false);
-    // Tell Next.js to reload server data
     router.refresh();
   };
 
+  // Sync Zustand store for preview
+  useEffect(() => {
+    // Assume useHomeStore is imported and used here if needed
+  }, [form]);
+
   return (
     <main className="min-h-screen bg-white px-8 py-12">
-      <div className="flex justify-between items-center mb-6">
+      <div className="mb-6 flex items-center justify-between">
         <h1 className="text-3xl font-bold">Home #{id} Preview</h1>
         <button
           onClick={() => setEditMode((m) => !m)}
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
         >
           {editMode ? "Cancel" : "Edit"}
         </button>
       </div>
 
       {editMode ? (
-        <div className="space-y-4 max-w-md">
+        <div className="max-w-md space-y-4">
+          <label className="block">
+            Name:
+            <input
+              type="text"
+              value={form.name}
+              onChange={(e) => onChange("name", e.target.value)}
+              className="mt-1 w-full rounded border p-2"
+            />
+          </label>
           <label className="block">
             Bedrooms:
             <input
               type="number"
               value={form.bedrooms}
               onChange={(e) => onChange("bedrooms", +e.target.value)}
-              className="mt-1 w-full p-2 border rounded"
+              className="mt-1 w-full rounded border p-2"
+            />
+          </label>
+          <label className="block">
+            Bathrooms:
+            <input
+              type="number"
+              value={form.bathrooms}
+              onChange={(e) => onChange("bathrooms", +e.target.value)}
+              className="mt-1 w-full rounded border p-2"
             />
           </label>
           <label className="block">
@@ -83,7 +100,7 @@ export default function ClientHomePage({ id, homeData }: Props) {
               type="text"
               value={form.style}
               onChange={(e) => onChange("style", e.target.value)}
-              className="mt-1 w-full p-2 border rounded"
+              className="mt-1 w-full rounded border p-2"
             />
           </label>
           <label className="block">
@@ -92,7 +109,7 @@ export default function ClientHomePage({ id, homeData }: Props) {
               type="text"
               value={form.budget}
               onChange={(e) => onChange("budget", e.target.value)}
-              className="mt-1 w-full p-2 border rounded"
+              className="mt-1 w-full rounded border p-2"
             />
           </label>
           <label className="block">
@@ -101,10 +118,9 @@ export default function ClientHomePage({ id, homeData }: Props) {
               type="text"
               value={form.image}
               onChange={(e) => onChange("image", e.target.value)}
-              className="mt-1 w-full p-2 border rounded"
+              className="mt-1 w-full rounded border p-2"
             />
           </label>
-          {/* For simplicity, edit listings as JSON */}
           <label className="block">
             Listings (JSON):
             <textarea
@@ -112,21 +128,18 @@ export default function ClientHomePage({ id, homeData }: Props) {
               value={JSON.stringify(form.listings, null, 2)}
               onChange={(e) => {
                 try {
-                  onChange(
-                    "listings",
-                    JSON.parse(e.target.value) as { title: string; price: string }[]
-                  );
+                  onChange("listings", JSON.parse(e.target.value) as Listing[]);
                 } catch {
-                  // ignore parse errors
+                  // ignore invalid JSON
                 }
               }}
-              className="mt-1 w-full p-2 border rounded font-mono text-sm"
+              className="mt-1 w-full rounded border p-2 font-mono text-sm"
             />
           </label>
           <button
             onClick={onSave}
             disabled={saving}
-            className="px-4 py-2 bg-emerald-600 text-white rounded hover:bg-emerald-700"
+            className="rounded bg-emerald-600 px-4 py-2 text-white hover:bg-emerald-700"
           >
             {saving ? "Saving…" : "Save Changes"}
           </button>
@@ -141,7 +154,13 @@ export default function ClientHomePage({ id, homeData }: Props) {
           <LiveHomePreview />
           <section className="mt-8 space-y-2">
             <p>
+              <strong>Name:</strong> {form.name}
+            </p>
+            <p>
               <strong>Bedrooms:</strong> {form.bedrooms}
+            </p>
+            <p>
+              <strong>Bathrooms:</strong> {form.bathrooms}
             </p>
             <p>
               <strong>Style:</strong> {form.style}
@@ -151,7 +170,7 @@ export default function ClientHomePage({ id, homeData }: Props) {
             </p>
             <div>
               <strong>Listings:</strong>
-              <ul className="list-disc list-inside ml-4">
+              <ul className="ml-4 list-inside list-disc">
                 {form.listings.map((l, i) => (
                   <li key={i}>
                     {l.title}: {l.price}

@@ -1,0 +1,27 @@
+ generator client {
+   provider = "prisma-client-js"
+ }
+
+ datasource db {
+   provider = "postgresql"
+   url      = env("DATABASE_URL")
+ }
+
+model Home {
+  id        Int       @id @default(autoincrement())
+  name      String
+  bedrooms  Int
+  bathrooms Int
+  style     String
+  budget    String
+  image     String
+  listings  Listing[]
+}
+
+ model Listing {
+   id      Int    @id @default(autoincrement())
+   title   String
+   price   String
+   home    Home   @relation(fields: [homeId], references: [id])
+   homeId  Int
+ }
