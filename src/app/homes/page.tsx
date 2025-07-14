@@ -1,8 +1,9 @@
 // src/app/homes/page.tsx
 import Link from "next/link";
-import homesData from "@/data/homes.json";
+import { getAllHomes } from "@/data/homesStore";
 
 export default function HomesIndex() {
+  const homesData = getAllHomes();
   return (
     <main className="min-h-screen bg-white px-8 py-12">
       <h1 className="text-4xl font-bold mb-8">Demo Homes</h1>
