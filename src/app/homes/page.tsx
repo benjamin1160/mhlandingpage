@@ -1,14 +1,25 @@
-// src/app/homes/page.tsx
-"use client";
+import Link from 'next/link';
+import { homes } from '@/data/homes';
 
-import HomesSpreadsheet from "@/components/HomesSpreadsheet";
+export const metadata = { title: 'Available Homes' };
 
-export default function HomesAdminPage() {
+export default function HomesPage() {
   return (
-    <main className="min-h-screen bg-white px-8 py-12">
-      {/* prettier-ignore */}
-      <h1 className="text-4xl font-bold mb-6">Homes Database</h1>
-      <HomesSpreadsheet />
-    </main>
+    <div className="p-8">
+      <h1 className="mb-4 text-3xl font-bold">Available Homes</h1>
+      <div className="grid gap-4 sm:grid-cols-3">
+        {homes.map((home) => (
+          <Link
+            key={home.slug}
+            href={`/homes/${home.slug}`}
+            className="rounded border p-4 hover:shadow"
+          >
+            <img src={home.image} alt={home.model} className="mb-2 h-32 w-full object-cover" />
+            <div className="font-semibold">{home.model}</div>
+            <div>{`${home.city} · $${home.price.toLocaleString()}`}</div>
+          </Link>
+        ))}
+      </div>
+    </div>
   );
 }
